@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
 
   const required = [
     "first_name", "last_name", "email", "os_type", "os_version",
-    "computer_model", "cpu", "plugin_name", "daw_name", "issue_category", "description",
+    "computer_model", "cpu", "plugin_name", "daw_name", "daw_version", "issue_category", "description",
   ];
   for (const field of required) {
     if (!body[field] || String(body[field]).trim() === "") {
@@ -30,15 +30,15 @@ export async function POST(req: NextRequest) {
   await db.execute({
     sql: `INSERT INTO support_tickets (
       ticket_number, first_name, last_name, email, os_type, os_version,
-      computer_model, cpu, uses_rosetta, plugin_name, daw_name,
+      computer_model, cpu, uses_rosetta, plugin_name, daw_name, daw_version,
       issue_category, description, screenshot_urls, video_links
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     args: [
       ticketNumber, body.first_name.trim(), body.last_name.trim(),
       body.email.trim().toLowerCase(), body.os_type, body.os_version,
       body.computer_model.trim(), body.cpu.trim(),
       body.os_type === "macOS" ? (body.uses_rosetta ? 1 : 0) : 0,
-      body.plugin_name, body.daw_name, body.issue_category,
+      body.plugin_name, body.daw_name, body.daw_version.trim(), body.issue_category,
       body.description.trim(), body.screenshot_urls || null, body.video_links || null,
     ],
   });

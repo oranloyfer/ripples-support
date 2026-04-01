@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 const PLUGINS = [
   "Cascade", "Clamp", "Confluence", "Crucible", "Detonate",
@@ -10,8 +11,8 @@ const PLUGINS = [
 ];
 
 const MAC_VERSIONS = [
-  "macOS 15 Sequoia", "macOS 14 Sonoma", "macOS 13 Ventura",
-  "macOS 12 Monterey", "macOS 11 Big Sur",
+  "macOS 26 Tahoe", "macOS 15 Sequoia", "macOS 14 Sonoma",
+  "macOS 13 Ventura", "macOS 12 Monterey", "macOS 11 Big Sur",
 ];
 const WIN_VERSIONS = [
   "Windows 11", "Windows 10",
@@ -40,7 +41,7 @@ export default function SupportPage() {
   const [form, setForm] = useState({
     first_name: "", last_name: "", email: "",
     os_type: "", os_version: "", computer_model: "", cpu: "",
-    uses_rosetta: false, plugin_name: "", daw_name: "",
+    uses_rosetta: false, plugin_name: "", daw_name: "", daw_version: "",
     issue_category: "", description: "",
     screenshot_urls: "", video_links: "",
   });
@@ -62,6 +63,7 @@ export default function SupportPage() {
     if (!form.cpu.trim()) errs.cpu = "Required";
     if (!form.plugin_name) errs.plugin_name = "Select a plugin";
     if (!form.daw_name) errs.daw_name = "Select your DAW";
+    if (!form.daw_version.trim()) errs.daw_version = "Enter your DAW version";
     if (!form.issue_category) errs.issue_category = "Select a category";
     if (!form.description.trim()) errs.description = "Please describe your issue";
     if (form.description.trim().length < 20) errs.description = "Please provide more detail (at least 20 characters)";
@@ -105,7 +107,7 @@ export default function SupportPage() {
       {/* Header */}
       <header className="border-b border-[#222] bg-[#111]">
         <div className="mx-auto max-w-3xl px-6 py-6 flex items-center gap-4">
-          <div className="h-10 w-10 rounded-lg bg-[#9D391E] flex items-center justify-center font-bold text-lg">R</div>
+          <Image src="/logo.png" alt="RIPPLES Audio" width={40} height={40} className="rounded-lg" />
           <div>
             <h1 className="text-xl font-bold tracking-tight">RIPPLES Audio Support</h1>
             <p className="text-xs text-[#888]">Submit a support ticket — we&apos;ll get back to you ASAP</p>
@@ -209,6 +211,11 @@ export default function SupportPage() {
                 </select>
                 {errors.daw_name && <p className="text-xs text-red-400 mt-1">{errors.daw_name}</p>}
               </div>
+            </div>
+            <div className="mt-4">
+              <label className="block text-xs text-[#999] mb-1">DAW Version *</label>
+              <input className={inputClass("daw_version")} placeholder='e.g. "13.0.40", "12", "11.3.1"' value={form.daw_version} onChange={(e) => set("daw_version", e.target.value)} />
+              {errors.daw_version && <p className="text-xs text-red-400 mt-1">{errors.daw_version}</p>}
             </div>
             <div className="mt-4">
               <label className="block text-xs text-[#999] mb-1">Issue Category *</label>

@@ -29,6 +29,7 @@ export async function ensureDb(): Promise<Client> {
       uses_rosetta INTEGER DEFAULT 0,
       plugin_name TEXT NOT NULL,
       daw_name TEXT,
+      daw_version TEXT,
       issue_category TEXT NOT NULL,
       description TEXT NOT NULL,
       screenshot_urls TEXT,
