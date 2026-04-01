@@ -49,6 +49,15 @@ export async function ensureDb(): Promise<Client> {
       created_at TEXT DEFAULT (datetime('now')),
       FOREIGN KEY (ticket_id) REFERENCES support_tickets(id)
     )`);
+    await db.execute(`CREATE TABLE IF NOT EXISTS email_list (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      email TEXT NOT NULL UNIQUE,
+      first_name TEXT,
+      last_name TEXT,
+      source TEXT DEFAULT 'support',
+      subscribed INTEGER DEFAULT 1,
+      created_at TEXT DEFAULT (datetime('now'))
+    )`);
     // Migrate: add daw_version column if missing
     try { await db.execute("ALTER TABLE support_tickets ADD COLUMN daw_version TEXT"); } catch { /* already exists */ }
 
