@@ -49,6 +49,9 @@ export async function ensureDb(): Promise<Client> {
       created_at TEXT DEFAULT (datetime('now')),
       FOREIGN KEY (ticket_id) REFERENCES support_tickets(id)
     )`);
+    // Migrate: add daw_version column if missing
+    try { await db.execute("ALTER TABLE support_tickets ADD COLUMN daw_version TEXT"); } catch { /* already exists */ }
+
     _initialized = true;
   }
   return db;
